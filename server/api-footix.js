@@ -1,9 +1,35 @@
 //L'application requiert l'utilisation du module Express.
 //La variable express nous permettra d'utiliser les fonctionnalités du module Express.
 var express = require('express');
+
 // Nous définissons ici les paramètres du serveur.
 var hostname = 'localhost';
 var port = 3000;
+
+// La variable mongoose nous permettra d'utiliser les fonctionnalités du module mongoose.
+var mongoose = require('mongoose');
+// Ces options sont recommandées par mLab pour une connexion à la base
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
+
+//URL de notre base
+var urlmongo = "mongodb://groupe4:pokemon1006@ds159187.mlab.com:59187/footix";
+
+// Nous connectons l'API à notre base de données
+mongoose.connect(urlmongo, options);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
+db.once('open', function (){
+    console.log("Connexion à la base OK");
+});
+
+// Pour modéliser les données, le framework mongoose utilise des "schémas" ; nous créons donc un modèle de données :
+var placeSchema = mongoose.Schema({
+    name: String,
+});
+
+var Place = mongoose.model('Place', placeSchema);
 
 // Nous créons un objet de type Express.
 var app = express();
@@ -28,18 +54,19 @@ myRouter.route('/results')
 // J'implémente les méthodes GET, PUT, UPDATE et DELETE
 // GET
 .get(function(req,res){
- res.json({
- message : "Liste des lieux correspondants avec les paramètres :",
- ville : req.query.ville,
- club : req.query.club,
- from: req.query.from,
- to: req.query.to,
- methode : req.method });
+// Utilisation de notre schéma Piscine pour interrogation de la base
+  Place.find(function(err, places){
+    if (err){
+        res.send(err);
+    }
+    res.json(places);
+  });
 })
+
 // POST
 .post(function(req,res){
  res.json({message : "Ajoute un nouveau lieu à la liste",
- nom : req.body.nom,
+ name : req.body.name,
  ville : req.body.ville,
  description : req.body.description,
  infos : req.body.infos,
