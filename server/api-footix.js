@@ -62,16 +62,19 @@ myRouter.route('/results')
     res.json(places);
   });
 })
-
 // POST
 .post(function(req,res){
- res.json({message : "Ajoute un nouveau lieu à la liste",
- name : req.body.name,
- ville : req.body.ville,
- description : req.body.description,
- infos : req.body.infos,
- badges: req.body.badges,
- methode : req.method});
+  // Nous utilisons le schéma Piscine
+    var place = new Place();
+  // Nous récupérons les données reçues pour les ajouter à l'objet Piscine
+    place.name = req.body.name;
+  //Nous stockons l'objet en base
+    place.save(function(err){
+      if(err){
+        res.send(err);
+      }
+      res.send({message : 'Bravo, le lieu est ajouté à la bdd !'});
+    })
 })
 //PUT
 .put(function(req,res){
@@ -82,15 +85,40 @@ myRouter.route('/results')
 res.json({message : "Suppression d'un lieu", methode : req.method});
 });
 
+// route vers d'une page
 myRouter.route('/results/:place_id')
 .get(function(req,res){
-	  res.json({message : "Vous souhaitez accéder aux informations du lieu n°" + req.params.place_id});
+    //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
+    place.findById(req.params.place_id, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(piscine);
+  });
 })
 .put(function(req,res){
-	  res.json({message : "Vous souhaitez modifier les informations du lieu n°" + req.params.place_id});
+// On commence par rechercher la piscine souhaitée
+  Place.findById(req.params.place_id, function(err, place) {
+    if (err){
+      res.send(err);
+    }
+  // Mise à jour des données de la piscine
+  place.nom = req.body.nom;
+    place.save(function(err){
+      if(err){
+        res.send(err);
+      }
+      // Si tout est ok
+      res.json({message : 'Bravo, mise à jour des données OK'});
+    });
+  });
 })
 .delete(function(req,res){
-	  res.json({message : "Vous souhaitez supprimer le lieu n°" + req.params.place_id});
+  Place.remove({_id: req.params.place_id}, function(err, place){
+    if (err){
+        res.send(err);
+    }
+    res.json({message:"Bravo, lieu supprimé"});
+  });
 });
 
 // Nous demandons à l'application d'utiliser notre routeur
