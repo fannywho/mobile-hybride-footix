@@ -89,10 +89,10 @@ res.json({message : "Suppression d'un lieu", methode : req.method});
 myRouter.route('/results/:place_id')
 .get(function(req,res){
     //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
-    place.findById(req.params.place_id, function(err, place) {
+    Place.findById(req.params.place_id, function(err, place) {
     if (err)
       res.send(err);
-    res.json(piscine);
+    res.json(place);
   });
 })
 .put(function(req,res){
