@@ -2,9 +2,6 @@
 .DS_Store
 *.xcuserdatad
 
-# android && IOS
-platforms/*
-
 # node
 node_modules/
 package-lock.json
