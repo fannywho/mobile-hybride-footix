@@ -5,11 +5,9 @@ var placeSchema = mongoose.Schema({
     name: String,
     badges: [String],
     type: String,
-    infos: {
-      adresse: String,
-      openHour: String,
-      closeHour: String
-    },
+    adresse: String,
+    openHour: String,
+    closeHour: String,
     photos: [String],
     club: String,
 });

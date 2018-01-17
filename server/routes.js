@@ -40,9 +40,9 @@ myRouter.route('/add')
   place.city            = req.body.city;
   place.badges          = req.body.badges;
   place.photos          = req.body.photos;
-  // place.infos.adresse   = req.body.infos.adresse;
-  // place.infos.openHour  = req.body.infos.openHour;
-  // place.infos.closeHour = req.body.infos.closeHour;
+  place.adresse         = req.body.adresse;
+  place.openHour        = req.body.openHour;
+  place.closeHour       = req.body.closeHour;
 
   //Nous stockons l'objet en base
   place.save(function(err){
