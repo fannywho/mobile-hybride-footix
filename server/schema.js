@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var placeSchema = mongoose.Schema({
     name: String,
     badges: [String],
-    description: String,
     type: String,
     infos: {
       adresse: String,

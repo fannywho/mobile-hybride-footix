@@ -27,11 +27,20 @@ myRouter.route('/results')
   });
 });
 
-myRouter.route('results/add')
+myRouter.route('/add')
 // POST
 .post(function(req,res){
     // Nous récupérons les données reçues pour les ajouter à l'objet Place
-  place.name = req.body.name;
+  place.name            = req.body.name;
+  place.type            = req.body.type;
+  place.club            = req.body.club;
+  place.city            = req.body.city;
+  place.badges          = req.body.badges;
+  place.photos          = req.body.photos;
+  // place.infos.adresse   = req.body.infos.adresse;
+  // place.infos.openHour  = req.body.infos.openHour;
+  // place.infos.closeHour = req.body.infos.closeHour;
+
   //Nous stockons l'objet en base
   place.save(function(err){
     if(err){
@@ -40,6 +49,29 @@ myRouter.route('results/add')
     res.send({message : 'Bravo, le lieu est ajouté à la base de donnée !'});
   })
 });
+
+
+myRouter.route('/results/:place_city')
+// GET
+.get(function(req,res){
+  //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
+  Place.find({ city: req.params.place_city }, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(place);
+  });
+})
+
+myRouter.route('/results/:place_city/:place_club')
+// GET
+.get(function(req,res){
+  //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
+  Place.find({ city: req.params.place_city, club: req.params.place_club }, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(place);
+  });
+})
 
 myRouter.route('/results/:place_id')
 // GET
