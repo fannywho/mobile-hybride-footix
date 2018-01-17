@@ -11,6 +11,8 @@ myRouter.route('/')
   res.json({message : "Bienvenue sur la première API de Fanny et Samy !", methode : req.method});
 });
 
+var place = new Place();
+
 // Liste de résultats
 myRouter.route('/results')
 // GET
@@ -23,8 +25,6 @@ myRouter.route('/results')
     res.json(places);
   });
 });
-
-var place = new Place();
 
 myRouter.route('results/add')
 // POST
