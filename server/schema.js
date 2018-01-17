@@ -4,16 +4,35 @@ var mongoose = require('mongoose');
 var placeSchema = mongoose.Schema({
     name: String,
     badges: [String],
+    description: String,
     type: String,
     infos: {
       adresse: String,
       openHour: String,
       closeHour: String
     },
-    photos: Array,
+    photos: [String],
     club: String,
 });
 
-var Place = mongoose.model('Place', placeSchema, 'place');
+var badgeSchema = mongoose.Schema({
+    name: String,
+    description: String,
+    icon: [String],
+});
 
-module.exports = Place;
+var clubSchema = mongoose.Schema({
+    name: String,
+    icon: String,
+});
+
+
+var Place = mongoose.model('Place', placeSchema, 'place');
+var Badge = mongoose.model('Badge', placeSchema, 'badge');
+var Club = mongoose.model('Club', placeSchema, 'club');
+
+module.exports = {
+  place: Place,
+  club: Club,
+  badge: Badge,
+};
