@@ -29,7 +29,7 @@ db.once('open', function (){
 
 // Nous définissons ici les paramètres du serveur.
 var hostname = 'localhost';
-var port = 3000;
+var port = 8000;
 
 // Nous créons un objet de type Express.
 var app = express();
@@ -40,6 +40,13 @@ app.use(bodyParser.json());
 
 // Nous demandons à l'application d'utiliser notre routeur
 app.use(router);
+
+// Call Api From a different Port
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Démarrer le serveur
 app.listen(port, hostname, function(){
