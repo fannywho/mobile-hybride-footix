@@ -1,54 +1,308 @@
 <!DOCTYPE html>
 <!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
 -->
 <html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;style-src * 'unsafe-inline' 'self' data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;img-src * data: 'unsafe-inline' 'self' content:">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
-        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+<head>
+  <!--
+  Customize this policy to fit your own app's needs. For more guidance, see:
+  https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+  Some notes:
+  * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+  * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+  * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+  * Enable inline JS: add 'unsafe-inline' to default-src
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;style-src * 'unsafe-inline' 'self' data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;img-src * data: 'unsafe-inline' 'self' content:">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<link rel="stylesheet" href="css/index.css">
+<title>Hello World</title>
+</head>
+<body>
+  <div id="app">
+    <h1>Apache Cordova</h1>
+    <div id="deviceready" class="blink">
+      <!-- NAVIGATOR -->
+      <ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
+
+      <!-- TABBAR -->
+      <ons-page>
+        <ons-tabbar swipeable position="auto">
+        </ons-tab>
+        <ons-tab page="home.html" label="Search" icon="md-search" active>
+        </ons-tab>
+        <ons-tab page="add.html" label="Ajouter un lieu" icon="md-plus">
+        </ons-tab>
+        <ons-tab page="badges.html" label="Badges" icon="ion-ios-ionic-outline">
+        </ons-tab>
+      </ons-tabbar>
+    </ons-page>
+
+      <!-- TEMPLATE HOME -->
+      <template id="home.html">
+      <ons-page id="home">
+        <ons-toolbar>
+          <div class="center">
+            <div class="center"></div>
+            <img src="img/Group.png" alt="Footix logo" />
+          </div>
+        </ons-toolbar>
+        <h1>Où suivre une recontre ?</h1>
+
+          <!-- FORM -->
+          <form class="" action="index.html" method="post">
+          <p>
+            <span><img src="img/ico-ville.png" alt="" />Ville</span>
+            <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
+          </p>
+          <p>
+            <span><img src="img/ico-club.png" alt="">Club</span>
+            <ons-select id="choose-sel" onchange="editSelects(event)">
+              <option value="manu">Manchester United</option>
+              <option value="mancity">Manchester City</option>
+            </ons-select>
+          </p>
+          <ons-button modifier="large" onclick="search()">Valider</ons-button>
+        </form>
+
+          <!-- LISTE -->
+          <section class="listing">
+          <!-- TITRE -->
+          <h2>Notre sélection</h2>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <a href="#" id="push-button">
+                <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="" />
+                <div class="listing__container__text">
+                  <div class="listing__container__text_info">
+                    <span>PUB</span>
+                    <span>Irish Corner</span>
+                  </div>
+                  <div>
+                    <img src="img/ico-club.png" alt="">
+                  </div>
+                </div>
+              </a>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+          <ons-button class="show-more" modifier="large" onclick="display()">Tout afficher (<span class="counter">60</span>)</ons-button>
+        </section>
+      </ons-page>
+    </template>
+
+<!-- TEMPLATE SINGLE PAGE -->
+<template id="single.html">
+  <ons-page id="single">
+    <ons-toolbar>
+      <div class="left"><ons-back-button></ons-back-button></div>
+      <div class="center">Detail</div>
+    </ons-toolbar>
+    <ons-carousel swipeable overscrollable auto-scroll fullscreen var="carousel">
+        <ons-carousel-item>
+          <div class="item-label">
+            <img src="img/bar-1.png">
+
+          </div>
+        </ons-carousel-item>
+        <ons-carousel-item>
+          <div class="item-label">
+            <img src="img/bar-2.jpg">
+
+          </div>
+        </ons-carousel-item>
+        <ons-carousel-item>
+          <div class="item-label">
+              <img src="img/bar-3.jpg">
+          </div>
+        </ons-carousel-item>
+    </ons-carousel>
+    <section class="details__informations">
+        <div class="details__club">
+            <h3>Club affilié</h3>
+            <img src="img/manu.png">
+            <p>Manchester united</p>
+        </div>
+        <div class="details__title">
+            <h3>Irish Corner</h2>
+            <p>Pub</p>
+            <address>12, Easton street, Londres</address>
+        </div>
+        <div class="details__cta">
+            <ons-button class="show" modifier="large" onclick="display()">Y aller<img src="img/img-layout/maps.png"></ons-button>
+        </div>
+        <div class="details__badges">
+            <h3>Badges <a href="#">(C'est quoi ?)</a></h3>
+            <img src="img/img-layout/badge-ambiance.png">
+            <p>Ambiance de feu</p>
+        </div>
+        <div class="details__hours">
+            <h3>Horaires</h3>
+            <p>Du lundi au samedi</p>
+            <div class="bar-opening__container">
+                <p class="bar-opening">open</p>
+                <p>14h</p>
+                <p class="bar-opening">closed</p>
+                <p>01h</p>
             </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/methods.js"></script>
-    </body>
+    </section>
+</template>
+
+<!-- TEMPLATE BADGES PAGE -->
+
+<template id="badges.html">
+  <ons-page id="badges">
+    <ons-toolbar>
+      <div class="left"><ons-back-button></ons-back-button></div>
+      <div class="center">Detail</div>
+    </ons-toolbar>
+
+    <section class="badges__description">
+        <h3>Les badges</h3>
+        <p>Les badges sont attribués aux établissements recensés sur <strong>Match</strong>, et permettent d’identifier ceux qui correspondent le mieux à l’expérience que vous souhaitez vivre.</p>
+    </section>
+
+    <section class="badges__tabs">
+        <ul>
+        </ul>
+    </section>
+    <script type="text/javascript">
+    ajaxBadgeFind();
+    </script>
+  </ons-page>
+</template>
+
+<!-- TEMPLATE ADD FROM -->
+    <template id="add.html">
+      <ons-page id="add">
+        <ons-toolbar>
+          <div class="center">
+            <img src="img/Group.png" alt="Footix logo" />
+          </div>
+        </ons-toolbar>
+        <h3>Ajouter un établissement</h3>
+        <span>Etape 1/3</span>
+        <form class="" action="index.html" method="post">
+          <div>
+            <!-- ville -->
+            <p>
+              <span><img src="img/ico-ville.png" alt="" />Ville</span>
+              <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
+            </p>
+            <!-- club affilié -->
+            <p>
+              <span><img src="img/ico-club.png" alt="">Club affilié</span>
+              <ons-select id="choose-sel" onchange="editSelects(event)">
+                <option value="manu">Manchester United</option>
+                <option value="mancity">Manchester City</option>
+              </ons-select>
+            </p>
+            <!-- Nom bar -->
+            <p>
+              <span><img src="img/ico-ville.png" alt="" />Nom</span>
+              <ons-input id="location" modifier="underbar" placeholder="The bar" float></ons-input>
+            </p>
+            <!-- NEXT -->
+            <ons-button class="next ghost-btn" modifier="large" onclick="search()">Suivant</ons-button>
+          </div>
+        </form>
+      </ons-page>
+    </template>
+
+</div>
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/methods.js"></script>
+</body>
 </html>

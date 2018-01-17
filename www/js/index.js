@@ -44,3 +44,50 @@ var app = {
 };
 
 app.initialize();
+
+document.addEventListener('init', function(event) {
+
+    // TABS //
+
+    var badges = document.querySelectorAll('.badges__tabs ul li');
+    var tabs = document.querySelectorAll('.badges__tabs ons-card');
+    var active = 0;
+
+    for (var i = 0; i < badges.length; i++) {
+      addLinkToDiv(i);
+    }
+
+    function addLinkToDiv(index) {
+      badges[index].addEventListener('click', function () {
+        badges[active].classList.remove('active');
+        tabs[active].classList.remove('active');
+
+        badges[index].classList.add('active');
+        tabs[index].classList.add('active');
+        active = index;
+      });
+    }
+
+  var listingElements = document.querySelectorAll('.listing__container');
+  console.log(listingElements);
+  var btnCount = document.querySelector('.counter');
+
+  btnCount.innerHTML = listingElements.length;
+});
+
+function display() {
+  var btn = document.querySelector('.listing > .show-more');
+  var elem = document.querySelectorAll('.listing .card');
+
+  for (i = 0; i < elem.length; i++) {
+    if (elem[i].className != "show") {
+      elem[i].classList.add("show");
+    }
+  }
+  btn.classList.add("hide");
+}
+
+
+
+
+

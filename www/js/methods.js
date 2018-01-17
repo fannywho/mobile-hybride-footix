@@ -58,9 +58,26 @@ function ajaxBadgeFind() {
   xhr.addEventListener("load", function () {
     if (xhr.status >= 200 && xhr.status < 400) {
       var res = JSON.parse(xhr.responseText);
+      var container_img  = document.querySelector('.badges__tabs ul');
+      var container_text = document.querySelector('.badges__tabs');
+      console.log(container_img);
+      console.log(container_text);
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i]);
+        if (i === 0) {
+          container_img.innerHTML += '<li class="active"><img src ="img/img-layout/'+res[i].icon+'"></li>';
+        } else {
+          container_img.innerHTML += '<li><img src ="img/img-layout/'+res[i].icon+'"></li>';
+        }
+      }
 
-      return res;
-
+      for (var i = 0; i < res.length; i++) {
+        if (i === 0) {
+          container_text.innerHTML += '<ons-card class="active"><img src="img/img-layout/'+res[i].icon+'"><h3>'+res[i].name+'</h3><p>'+res[i].description+'</p></ons-card>'
+        } else {
+          container_text.innerHTML += '<ons-card><img src="img/img-layout/'+res[i].icon+'"><h3>'+res[i].name+'</h3><p>'+res[i].description+'</p></ons-card>'
+        }
+      }
     }else{
       console.error(xhr.status);
     }
