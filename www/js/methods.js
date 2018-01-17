@@ -31,8 +31,9 @@ function ajaxPlaceAdd(url, data) {
 
 
 
-function ajaxClubFind(url, container) {
-  var xhr        = new XMLHttpRequest();
+function ajaxClubFind() {
+  var xhr        = new XMLHttpRequest(),
+      url        = 'http://localhost:8000/clubs';
   xhr.open('GET', url, false);
 
   xhr.addEventListener("load", function () {
@@ -40,7 +41,26 @@ function ajaxClubFind(url, container) {
       var res = JSON.parse(xhr.responseText);
 
       return res;
-      
+
+    }else{
+      console.error(xhr.status);
+    }
+  });
+
+  xhr.send();
+}
+
+function ajaxBadgeFind() {
+  var xhr        = new XMLHttpRequest(),
+      url        = 'http://localhost:8000/badges';
+  xhr.open('GET', url, false);
+
+  xhr.addEventListener("load", function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+      var res = JSON.parse(xhr.responseText);
+
+      return res;
+
     }else{
       console.error(xhr.status);
     }
