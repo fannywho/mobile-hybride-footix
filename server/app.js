@@ -38,15 +38,15 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Nous demandons à l'application d'utiliser notre routeur
-app.use(router);
-
 // Call Api From a different Port
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+// Nous demandons à l'application d'utiliser notre routeur
+app.use(router);
 
 // Démarrer le serveur
 app.listen(port, hostname, function(){

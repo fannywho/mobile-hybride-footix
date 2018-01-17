@@ -2,7 +2,9 @@ var express = require('express');
 
 // L'object qui contient le schéma de nos données via mongoose
 var Schema = require('./schema.js');
-var Place = Schema.place;
+var Place  = Schema.place;
+var Badge  = Schema.badge;
+var Club   = Schema.club;
 
 // Notre router
 var myRouter = express.Router();
@@ -27,11 +29,21 @@ myRouter.route('/results')
   });
 });
 
-myRouter.route('results/add')
+myRouter.route('/add')
 // POST
 .post(function(req,res){
+  var place = new Place();
     // Nous récupérons les données reçues pour les ajouter à l'objet Place
-  place.name = req.body.name;
+  place.name            = req.body.name;
+  place.type            = req.body.type;
+  place.club            = req.body.club;
+  place.city            = req.body.city;
+  place.badges          = req.body.badges;
+  place.photos          = req.body.photos;
+  place.adresse         = req.body.adresse;
+  place.openHour        = req.body.openHour;
+  place.closeHour       = req.body.closeHour;
+
   //Nous stockons l'objet en base
   place.save(function(err){
     if(err){
@@ -40,6 +52,29 @@ myRouter.route('results/add')
     res.send({message : 'Bravo, le lieu est ajouté à la base de donnée !'});
   })
 });
+
+
+myRouter.route('/results/:place_city')
+// GET
+.get(function(req,res){
+  //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
+  Place.find({ city: req.params.place_city }, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(place);
+  });
+})
+
+myRouter.route('/results/:place_city/:place_club')
+// GET
+.get(function(req,res){
+  //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
+  Place.find({ city: req.params.place_city, club: req.params.place_club }, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(place);
+  });
+})
 
 myRouter.route('/results/:place_id')
 // GET
@@ -78,5 +113,33 @@ myRouter.route('/results/:place_id')
     res.json({message:"Bravo, lieu supprimé"});
   });
 });
+
+
+// Liste des badges
+myRouter.route('/badges')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Badge.find(function(err, badge){
+    if (err){
+      res.send(err);
+    }
+    res.json(badge);
+  });
+});
+
+// Liste des clubs
+myRouter.route('/clubs')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Club.find(function(err, club){
+    if (err){
+      res.send(err);
+    }
+    res.json(club);
+  });
+});
+
 
 module.exports = myRouter;
