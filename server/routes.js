@@ -2,7 +2,9 @@ var express = require('express');
 
 // L'object qui contient le schéma de nos données via mongoose
 var Schema = require('./schema.js');
-var Place = Schema.place;
+var Place  = Schema.place;
+var Badge  = Schema.badge;
+var Club   = Schema.club;
 
 // Notre router
 var myRouter = express.Router();
@@ -30,6 +32,7 @@ myRouter.route('/results')
 myRouter.route('/add')
 // POST
 .post(function(req,res){
+  var place = new Place();
     // Nous récupérons les données reçues pour les ajouter à l'objet Place
   place.name            = req.body.name;
   place.type            = req.body.type;
@@ -110,5 +113,33 @@ myRouter.route('/results/:place_id')
     res.json({message:"Bravo, lieu supprimé"});
   });
 });
+
+
+// Liste des badges
+myRouter.route('/badges')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Badge.find(function(err, badge){
+    if (err){
+      res.send(err);
+    }
+    res.json(badge);
+  });
+});
+
+// Liste des clubs
+myRouter.route('/clubs')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Club.find(function(err, club){
+    if (err){
+      res.send(err);
+    }
+    res.json(club);
+  });
+});
+
 
 module.exports = myRouter;

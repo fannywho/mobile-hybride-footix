@@ -27,8 +27,8 @@ var clubSchema = mongoose.Schema({
 
 
 var Place = mongoose.model('Place', placeSchema, 'place');
-var Badge = mongoose.model('Badge', placeSchema, 'badge');
-var Club = mongoose.model('Club', placeSchema, 'club');
+var Badge = mongoose.model('Badge', badgeSchema, 'badge');
+var Club = mongoose.model('Club', clubSchema, 'club');
 
 module.exports = {
   place: Place,
