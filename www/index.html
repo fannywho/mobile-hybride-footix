@@ -39,7 +39,7 @@ under the License.
 </head>
 <body>
   <div id="app">
-    <h1>Apache Cordova</h1>
+    <h1>Footix</h1>
     <div id="deviceready" class="blink">
       <!-- NAVIGATOR -->
       <ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
@@ -93,7 +93,7 @@ under the License.
           <ons-card>
             <div class="listing__container">
               <a href="#" id="push-button">
-                <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="" />
+                <img class="listing__container__img" src="img/img02.png" alt="" />
                 <div class="listing__container__text">
                   <div class="listing__container__text_info">
                     <span>PUB</span>
@@ -115,7 +115,7 @@ under the License.
                 <div class="listing__container__text_info">
                   <span>PUB</span>
                   <span>Irish Corner</span>
-                </div>
+                </div>  
                 <div>
                   <img src="img/ico-club.png" alt="">
                   <img src="img/ico-club.png" alt="">
@@ -259,6 +259,69 @@ under the License.
     ajaxBadgeFind();
     </script>
   </ons-page>
+</template>
+
+<!-- TEMPLATE SEARCH RESULTS -->
+
+<template id="results.html">
+    <ons-page id="add">
+        <section class="listing">
+          <!-- TITRE -->
+          <h2>Ne cherchez plus</h2>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <a href="#" id="push-button">
+                <img class="listing__container__img" src="img/img01.jpg" alt="" />
+                <div class="listing__container__text">
+                  <div class="listing__container__text_info">
+                    <span>PUB</span>
+                    <span>Irish Corner</span>
+                  </div>
+                  <div>
+                    <img src="img/ico-club.png" alt="">
+                  </div>
+                </div>
+              </a>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="img/img02.jpg" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+
+          <!-- ONE ITEM -->
+          <ons-card>
+            <div class="listing__container">
+              <img class="listing__container__img" src="img/img03.jpg" alt="">
+              <div class="listing__container__text">
+                <div class="listing__container__text_info">
+                  <span>PUB</span>
+                  <span>Irish Corner</span>
+                </div>
+                <div>
+                  <img src="img/ico-club.png" alt="">
+                  <img src="img/ico-club.png" alt="">
+                </div>
+              </div>
+            </div>
+          </ons-card>
+    </ons-page>
+
 </template>
 
 <!-- TEMPLATE ADD FROM -->
