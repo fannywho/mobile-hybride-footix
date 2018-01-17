@@ -1,5 +1,5 @@
 function ajaxPlaceFind(url, container) {
-  var xhr        = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
   xhr.open('GET', url, false);
 
   xhr.addEventListener("load", function () {
@@ -22,21 +22,52 @@ function ajaxPlaceFind(url, container) {
 
 // TODO: Prevent Form Submit Action
 function ajaxPlaceAdd(url, data) {
-  // var mdr = JSON.stringify(data);
-  var mdr = 'name='+data.name+'&type='+data.type+'&city='+data.city+'&club='+data.club;
-  // console.log(data.type);
-  // console.log(mdr);
-  // return false;
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, false);
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-  xhr.send(mdr);
+  xhr.send(data);
 }
 
 
 
 function ajaxClubFind(url, container) {
   var xhr        = new XMLHttpRequest();
+  xhr.open('GET', url, false);
+
+  xhr.addEventListener("load", function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+      var res = JSON.parse(xhr.responseText);
+      if (res instanceof Array){
+        for (var i = 0; i < res.length; i++) {
+          console.log(res[i]);
+        }
+      }else{
+        console.log(res);
+      }
+    }else{
+      console.error(xhr.status);
+    }
+  });
+
+  xhr.send();
+}
+
+
+function ajaxAddFormSubmit(form) {
+  $(form).submit(function( event ) {
+
+    var data  = $(form).serialize(),
+        url   = 'http://localhost:8000/add';
+
+    ajaxPlaceAdd(url, data);
+    // TODO: Redirect After Submit
+  });
+}
+
+
+function ajaxSearch(url) {
+  var xhr = new XMLHttpRequest();
   xhr.open('GET', url, false);
 
   xhr.addEventListener("load", function () {
