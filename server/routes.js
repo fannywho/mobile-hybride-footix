@@ -19,11 +19,11 @@ myRouter.route('/results')
 // GET
 .get(function(req,res){
 // Utilisation de notre schéma Place pour interrogation de la base
-  Place.find(function(err, places){
+  Place.find(function(err, place){
     if (err){
       res.send(err);
     }
-    res.json(places);
+    res.json(place);
   });
 });
 
