@@ -1,7 +1,8 @@
 var express = require('express');
 
 // L'object qui contient le schéma de nos données via mongoose
-var Place = require('./schema.js');
+var Schema = require('./schema.js');
+var Place = Schema.place;
 
 // Notre router
 var myRouter = express.Router();
