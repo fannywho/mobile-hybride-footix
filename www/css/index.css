@@ -455,6 +455,316 @@ ons-input {
   color: #2FED78;
 }
 
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
 
 
+/* GLOBALS */
 
+a {
+  text-decoration: none;
+}
+
+.toolbar {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: #55DE78;
+  color: white;
+}
+
+.toolbar img {
+  height: 25px;
+  width: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.toolbar__title {
+  color: white;
+}
+
+/* BOUTON RETOUR */
+
+#toolbar-back-button {
+  fill: white;
+}
+
+/* TABBAR */
+:checked+.tabbar__button {
+  color: #55DE78;
+}
+
+/* BACKGROUND */
+.page__background {
+  background: white;
+}
+
+/* FORM HOMEPAGE */
+form {
+  margin-bottom: 3px;
+  padding: 20px 14px 40px 14px;
+  -webkit-box-shadow: 0px 4px 7px -1px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 7px -1px rgba(0,0,0,0.2);
+}
+
+form img {
+  height: auto;
+  width: 20px;
+  margin-right: 20px;
+}
+
+form span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+ons-select {
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+ons-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+ons-input::-webkit-input-placeholder {
+  color: #444444;
+}
+
+ons-input:-ms-input-placeholder {
+  color: #444444;
+}
+
+ons-input::-ms-input-placeholder {
+  color: #444444;
+}
+
+ons-input::-webkit-input-placeholder {
+  color: #444444;
+}
+
+ons-input:-ms-input-placeholder {
+  color: #444444;
+}
+
+ons-input::placeholder {
+  color: #444444;
+}
+
+.button--large {
+  background: #55DE78;
+  margin-top: 20px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* LISTE HOME */
+
+#home h1 {
+  padding: 0 14px;
+  margin-bottom: 0;
+}
+
+.listing {
+  background: #f5f5f5;
+  padding: 20px 14px;
+}
+
+.listing__container {
+  width: 100%;
+}
+
+.listing__container a {
+  color: black;
+}
+
+.card .listing__container__img {
+  height: auto;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.listing__container__text {
+  padding: 10px 14px;
+}
+
+.listing__container__text img {
+  width: 20px;
+  height: auto;
+}
+
+.listing__container__text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.listing__container__text_info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.listing__container__text_info span {
+  margin-bottom: 10px;
+}
+
+.listing__container__text div:last-of-type {
+  float: right;
+}
+
+.card {
+  margin: 20px 0;
+  padding: 0 0;
+  border-radius: 10px;
+  display: none;
+}
+
+.card:nth-child(-n+3) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.ghost-btn {
+  background: white;
+  border: 1px solid #55DE78;
+  color: #55DE78;
+}
+
+/* ADD FORMMMMM */
+
+#add h3 {
+  padding: 0 14px;
+}
+
+#add form {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+form p {
+  margin: 20px 0;
+}
+
+form span {
+  padding: 0px 0px;
+}
+
+.form-step {
+  display: none;
+}
+
+#choose-day-start,
+#choose-day-end {
+  margin-left: 15px;
+}
+
+.inline-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.inline-form span {
+  margin: 0 15px;
+}
+
+.inline-form ons-select {
+  margin: 10px 0;
+}
+
+.inline-form span:last-of-type {
+  margin-right: 0px;
+}
+
+/* CONFIRM ADDED LOCATION PAGE */
+.added__ctn {
+  padding: 0 14px;
+  text-align: center;
+}
+
+.added__ctn img {
+  text-align: center;
+  height: 100px;
+  width: auto;
+  margin: 20px 0;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 45px;
+}
+
+.badges span:first-of-type {
+  margin-bottom: 20px;
+}
+
+.badges label img {
+  width: 40px;
+  height: auto;
+  margin-right: 15px;
+}
+
+
+/*CLASSES JS*/
+
+.show {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.show-form {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+
+#search .card {
+  display: flex !important;
+}

@@ -35,149 +35,138 @@ under the License.
 <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
 <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
 <link rel="stylesheet" href="css/index.css">
+<script type="text/javascript" src="cordova.js"></script>
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/methods.js"></script>
+<script>
+document.addEventListener('show', function(event) {
+  if (event.target.matches('#badges')) {
+    ajaxBadgeFind();
+  }
+  else if (event.target.matches('#search')) {
+    ajaxSearch(event.target.data.link);
+  }
+  else if (event.target.matches('#add')) {
+    var input    = $('.file_icon');
+    var btn_file = $('.trigger_file');
+    var valid_form = $('.valid_form');
+    $(btn_file).click(function() {
+      console.log(btn_file);
+      $(input).trigger('click')
+    });
+
+    $(valid_form).click(function() {
+      $('.add_step3').hide();
+      $('.add_step4').show();
+    });
+
+  }
+}, false);
+</script>
+<script>
+document.addEventListener('init', function(event) {
+  if (event.target.matches('#home')) {
+    ajaxPlaceFind();
+    var cards = document.querySelectorAll('ons-card .listing__container'),
+        nav   = document.querySelector('#myNavigator');
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].onclick = function() {
+        nav.pushPage('single.html', {data: {id: this.dataset.id}});
+      }
+    }
+    var submit = $('#search_submit');
+    $(submit).on('click', function( event ) {
+      var url;
+      if ($('#form #location').val() === '') {
+
+        return false;
+      } else {
+        if ($('#form #club').val() === '') {
+          url = 'http://localhost:8000/results/'+$('#form #location').val();
+        } else {
+          var club_url = 'http://localhost:8000/clubs',
+              club     = new XMLHttpRequest(),
+              this_club;
+
+          club.open('GET', club_url, false);
+
+          club.addEventListener("load", function () {
+            this_club  = JSON.parse(club.responseText);
+            for (var i = 0; i < this_club.length; i++) {
+              if (this_club[i].name === $('#form #club').val()) {
+                url = 'http://localhost:8000/results/'+$('#form #location').val()+'/'+this_club[i]._id;
+              }
+            }
+          })
+
+          club.send();
+        }
+        nav.pushPage('search.html', {data: {link: url}});
+      }
+    });
+  } else if (event.target.matches('#single')) {
+    ajaxPlaceFindOne(event.target.data.id);
+  }
+}, false);
+</script>
+<script type="text/javascript" src="js/index.js"></script>
 <title>Hello World</title>
 </head>
 <body>
   <div id="app">
-    <h1>Apache Cordova</h1>
+    <h1>Footix</h1>
     <div id="deviceready" class="blink">
       <!-- NAVIGATOR -->
-      <ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
-
-      <!-- TABBAR -->
+    <ons-navigator swipeable id="myNavigator" page="home.html">
       <ons-page>
         <ons-tabbar swipeable position="auto">
-        </ons-tab>
-        <ons-tab page="home.html" label="Search" icon="md-search" active>
-        </ons-tab>
-        <ons-tab page="add.html" label="Ajouter un lieu" icon="md-plus">
-        </ons-tab>
-        <ons-tab page="badges.html" label="Badges" icon="ion-ios-ionic-outline">
-        </ons-tab>
-      </ons-tabbar>
-    </ons-page>
-
-      <!-- TEMPLATE HOME -->
-      <template id="home.html">
-      <ons-page id="home">
-        <ons-toolbar>
-          <div class="center">
-            <div class="center"></div>
-            <img src="img/Group.png" alt="Footix logo" />
-          </div>
-        </ons-toolbar>
-        <h1>Où suivre une recontre ?</h1>
-
-          <!-- FORM -->
-          <form class="" action="index.html" method="post">
-          <p>
-            <span><img src="img/ico-ville.png" alt="" />Ville</span>
-            <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
-          </p>
-          <p>
-            <span><img src="img/ico-club.png" alt="">Club</span>
-            <ons-select id="choose-sel" onchange="editSelects(event)">
-              <option value="manu">Manchester United</option>
-              <option value="mancity">Manchester City</option>
-            </ons-select>
-          </p>
-          <ons-button modifier="large" onclick="search()">Valider</ons-button>
-        </form>
-
-          <!-- LISTE -->
-          <section class="listing">
-          <!-- TITRE -->
-          <h2>Notre sélection</h2>
-
-          <!-- ONE ITEM -->
-          <ons-card>
-            <div class="listing__container">
-              <a href="#" id="push-button">
-                <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="" />
-                <div class="listing__container__text">
-                  <div class="listing__container__text_info">
-                    <span>PUB</span>
-                    <span>Irish Corner</span>
-                  </div>
-                  <div>
-                    <img src="img/ico-club.png" alt="">
-                  </div>
-                </div>
-              </a>
-            </div>
-          </ons-card>
-
-          <!-- ONE ITEM -->
-          <ons-card>
-            <div class="listing__container">
-              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
-              <div class="listing__container__text">
-                <div class="listing__container__text_info">
-                  <span>PUB</span>
-                  <span>Irish Corner</span>
-                </div>
-                <div>
-                  <img src="img/ico-club.png" alt="">
-                  <img src="img/ico-club.png" alt="">
-                </div>
-              </div>
-            </div>
-          </ons-card>
-
-          <!-- ONE ITEM -->
-          <ons-card>
-            <div class="listing__container">
-              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
-              <div class="listing__container__text">
-                <div class="listing__container__text_info">
-                  <span>PUB</span>
-                  <span>Irish Corner</span>
-                </div>
-                <div>
-                  <img src="img/ico-club.png" alt="">
-                  <img src="img/ico-club.png" alt="">
-                </div>
-              </div>
-            </div>
-          </ons-card>
-
-          <!-- ONE ITEM -->
-          <ons-card>
-            <div class="listing__container">
-              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
-              <div class="listing__container__text">
-                <div class="listing__container__text_info">
-                  <span>PUB</span>
-                  <span>Irish Corner</span>
-                </div>
-                <div>
-                  <img src="img/ico-club.png" alt="">
-                  <img src="img/ico-club.png" alt="">
-                </div>
-              </div>
-            </div>
-          </ons-card>
-
-          <!-- ONE ITEM -->
-          <ons-card>
-            <div class="listing__container">
-              <img class="listing__container__img" src="http://via.placeholder.com/350x150" alt="">
-              <div class="listing__container__text">
-                <div class="listing__container__text_info">
-                  <span>PUB</span>
-                  <span>Irish Corner</span>
-                </div>
-                <div>
-                  <img src="img/ico-club.png" alt="">
-                  <img src="img/ico-club.png" alt="">
-                </div>
-              </div>
-            </div>
-          </ons-card>
-          <ons-button class="show-more" modifier="large" onclick="display()">Tout afficher (<span class="counter">60</span>)</ons-button>
-        </section>
+          </ons-tab>
+          <ons-tab page="home.html" label="Search" icon="md-search">
+          </ons-tab>
+          <ons-tab page="add.html" label="Ajouter un lieu" icon="md-plus">
+          </ons-tab>
+          <ons-tab page="badges.html" label="Badges" icon="ion-ios-ionic-outline">
+          </ons-tab>
+        </ons-tabbar>
       </ons-page>
-    </template>
+    </ons-navigator>
+
+<!-- TABBAR -->
+
+<!-- TEMPLATE HOME -->
+<template id="home.html">
+  <ons-page id="home">
+    <ons-toolbar>
+      <div class="center">
+        <div class="center"></div>
+        <img src="img/Group.png" alt="Footix logo" />
+      </div>
+    </ons-toolbar>
+    <h1>Où suivre une recontre ?</h1>
+
+      <!-- FORM -->
+      <form id="form" action="index.html" method="post">
+      <p>
+        <span><img src="img/ico-ville.png" alt="" />Ville</span>
+        <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
+      </p>
+      <p>
+        <span><img src="img/ico-club.png" alt="">Club</span>
+        <ons-input id="club" modifier="underbar" placeholder="Manchester United" float></ons-input>
+        <!-- <ons-select id="choose-sel" onchange="editSelects(event)">
+          <option value="manu">Manchester United</option>
+          <option value="mancity">Manchester City</option>
+        </ons-select> -->
+      </p>
+      <ons-button id="search_submit" modifier="large">Valider</ons-button>
+    </form>
+      <!-- LISTE -->
+    <section class="listing">
+
+    </section>
+  </ons-page>
+</template>
 
 <!-- TEMPLATE SINGLE PAGE -->
 <template id="single.html">
@@ -187,23 +176,7 @@ under the License.
       <div class="center">Detail</div>
     </ons-toolbar>
     <ons-carousel swipeable overscrollable auto-scroll fullscreen var="carousel">
-        <ons-carousel-item>
-          <div class="item-label">
-            <img src="img/bar-1.png">
 
-          </div>
-        </ons-carousel-item>
-        <ons-carousel-item>
-          <div class="item-label">
-            <img src="img/bar-2.jpg">
-
-          </div>
-        </ons-carousel-item>
-        <ons-carousel-item>
-          <div class="item-label">
-              <img src="img/bar-3.jpg">
-          </div>
-        </ons-carousel-item>
     </ons-carousel>
     <section class="details__informations">
         <div class="details__club">
@@ -235,6 +208,7 @@ under the License.
             </div>
         </div>
     </section>
+  </ons-page>
 </template>
 
 <!-- TEMPLATE BADGES PAGE -->
@@ -255,54 +229,253 @@ under the License.
         <ul>
         </ul>
     </section>
-    <script type="text/javascript">
-    ajaxBadgeFind();
-    </script>
   </ons-page>
 </template>
 
 <!-- TEMPLATE ADD FROM -->
-    <template id="add.html">
-      <ons-page id="add">
-        <ons-toolbar>
-          <div class="center">
-            <img src="img/Group.png" alt="Footix logo" />
-          </div>
-        </ons-toolbar>
-        <h3>Ajouter un établissement</h3>
+<template id="add.html">
+  <ons-page id="add">
+    <ons-toolbar>
+      <div class="center">
+        <img src="img/Group.png" alt="Footix logo" />
+      </div>
+    </ons-toolbar>
+    <h3>Ajouter un établissement</h3>
+    <form class="" action="index.html" method="post">
+      <!-- ADD STEP 1 -->
+      <div class="add_step1 form-step">
         <span>Etape 1/3</span>
-        <form class="" action="index.html" method="post">
-          <div>
-            <!-- ville -->
-            <p>
-              <span><img src="img/ico-ville.png" alt="" />Ville</span>
-              <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
-            </p>
-            <!-- club affilié -->
-            <p>
-              <span><img src="img/ico-club.png" alt="">Club affilié</span>
-              <ons-select id="choose-sel" onchange="editSelects(event)">
-                <option value="manu">Manchester United</option>
-                <option value="mancity">Manchester City</option>
-              </ons-select>
-            </p>
-            <!-- Nom bar -->
-            <p>
-              <span><img src="img/ico-ville.png" alt="" />Nom</span>
-              <ons-input id="location" modifier="underbar" placeholder="The bar" float></ons-input>
-            </p>
-            <!-- NEXT -->
-            <ons-button class="next ghost-btn" modifier="large" onclick="search()">Suivant</ons-button>
+        <!-- ville -->
+        <p>
+          <span><img src="img/ico-ville.png" alt="" />Ville</span>
+          <ons-input id="location" modifier="underbar" placeholder="Manchester" float></ons-input>
+        </p>
+        <!-- club affilié -->
+        <p>
+          <span><img src="img/ico-club.png" alt="">Club affilié</span>
+          <ons-input id="club" modifier="underbar" placeholder="Manchester United" float></ons-input>
+        </p>
+        <!-- Nom bar -->
+        <p>
+          <span><img src="img/ico-nom.png" alt="nom" />Nom</span>
+          <ons-input id="location" modifier="underbar" placeholder="The bar" float></ons-input>
+        </p>
+        <!-- NEXT -->
+        <ons-button class="next ghost-btn" modifier="large">Suivant</ons-button>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="add_step2 form-step">
+        <span>Etape 2/3</span>
+        <!-- établissement -->
+        <p>
+          <span><img src="img/ico-drink.png" alt="" />Type d'établissement</span>
+          <ons-input id="club" modifier="underbar" placeholder="Pub" float></ons-input>
+        </p>
+        <!-- club affilié -->
+        <p>
+          <span><img src="img/ico-pin.png" alt="">Adresse</span>
+          <ons-input id="address" modifier="underbar" placeholder="The bar" float></ons-input>
+        </p>
+        <!-- jours -->
+        <p>
+          <span><img src="img/ico-time.png" alt="">Horaires</span>
+          <div class="inline-form">
+            <span>Du</span>
+            <ons-select id="choose-day-start" onchange="editSelects(event)">
+              <option value="monday">Lundi</option>
+              <option value="tuesday">Mardi</option>
+              <option value="wednesday">Mercredi</option>
+              <option value="thursday">Jeudi</option>
+              <option value="friday">Vendredi</option>
+              <option value="saturday">Samedi</option>
+              <option value="sunday">Dimanche</option>
+            </ons-select>
           </div>
-        </form>
-      </ons-page>
-    </template>
+          <div class="inline-form">
+            <span>Au</span>
+            <ons-select id="choose-day-end" onchange="editSelects(event)">
+              <option value="monday">Lundi</option>
+              <option value="tuesday">Mardi</option>
+              <option value="wednesday">Mercredi</option>
+              <option value="thursday">Jeudi</option>
+              <option value="friday">Vendredi</option>
+              <option value="saturday">Samedi</option>
+              <option value="sunday">Dimanche</option>
+            </ons-select>
+          </div>
+        </p>
+
+        <!-- horaires -->
+        <p>
+          <div class="inline-form">
+            <span>Ouverture</span>
+            <ons-select id="choose-hour-start" onchange="editSelects(event)">
+              <option value="0-h-start">00</option>
+              <option value="1-h-start">01</option>
+              <option value="2-h-start">02</option>
+              <option value="3-h-start">03</option>
+              <option value="4-h-start">04</option>
+              <option value="5-h-start">05</option>
+              <option value="6-h-start">06</option>
+              <option value="7-h-start">07</option>
+              <option value="8-h-start">08</option>
+              <option value="9-h-start">09</option>
+              <option value="10-h-start">10</option>
+              <option value="11-h-start">11</option>
+              <option value="12-h-start">12</option>
+              <option value="13-h-start">13</option>
+              <option value="14-h-start">14</option>
+              <option value="15-h-start">15</option>
+              <option value="16-h-start">16</option>
+              <option value="17-h-start">17</option>
+              <option value="18-h-start">18</option>
+              <option value="19-h-start">19</option>
+              <option value="20-h-start">20</option>
+              <option value="21-h-start">21</option>
+              <option value="22-h-start">22</option>
+              <option value="23-h-start">23</option>
+            </ons-select>
+            <span>h</span>
+            <ons-select id="choose-minute-start" onchange="editSelects(event)">
+              <option value="0-m-start">00</option>
+              <option value="15-m-start">15</option>
+              <option value="30-m-start">30</option>
+              <option value="45-m-start">45</option>
+            </ons-select>
+            <span>m</span>
+          </div>
+          <div class="inline-form">
+            <span>Fermeture</span>
+            <ons-select id="choose-hour-end" onchange="editSelects(event)">
+              <option value="0-h-end">00</option>
+              <option value="1-h-end">01</option>
+              <option value="2-h-end">02</option>
+              <option value="3-h-end">03</option>
+              <option value="4-h-end">04</option>
+              <option value="5-h-end">05</option>
+              <option value="6-h-end">06</option>
+              <option value="7-h-end">07</option>
+              <option value="8-h-end">08</option>
+              <option value="9-h-end">09</option>
+              <option value="10-h-end">10</option>
+              <option value="11-h-end">11</option>
+              <option value="12-h-end">12</option>
+              <option value="13-h-end">13</option>
+              <option value="14-h-end">14</option>
+              <option value="15-h-end">15</option>
+              <option value="16-h-end">16</option>
+              <option value="17-h-end">17</option>
+              <option value="18-h-end">18</option>
+              <option value="19-h-end">19</option>
+              <option value="20-h-end">20</option>
+              <option value="21-h-end">21</option>
+              <option value="22-h-end">22</option>
+              <option value="23-h-end">23</option>
+            </ons-select>
+            <span>h</span>
+            <ons-select id="choose-minute-end" onchange="editSelects(event)">
+              <option value="0-m-end">00</option>
+              <option value="15-m-end">15</option>
+              <option value="30-m-end">30</option>
+              <option value="45-m-end">45</option>
+            </ons-select>
+            <span>m</span>
+          </ons-select>
+        </div>
+      </p>
+      <!-- NEXT -->
+      <ons-button class="next ghost-btn" modifier="large">Suivant</ons-button>
+    </div>
+
+    <!-- ADD FORM STEP 3 -->
+    <div class="add_step3 form-step">
+      <span>Etape 3/3</span>
+      <!-- badges -->
+      <span><img src="img/ico-badges.png" alt="" />Badges</span>
+      <p class="badges">
+        <label>
+          <ons-checkbox input-id="badge-ambiance"></ons-checkbox>
+        </label>
+        <label for="badge-ambiance">
+          <img src="img/badge-ambiance.png" alt="Ambiance">
+        </label>
+
+        <label>
+          <ons-checkbox input-id="badge-happy-h"></ons-checkbox>
+        </label>
+        <label for="badge-happy-h">
+          <img src="img/badge-happy-h.png" alt="Happy Hour">
+        </label>
+
+        <label>
+          <ons-checkbox input-id="badge-equipement"></ons-checkbox>
+        </label>
+        <label for="badge-equipement">
+          <img src="img/badge-stade.png" alt="Equipement">
+        </label>
+
+        <label>
+          <ons-checkbox input-id="badge-boisson-dor"></ons-checkbox>
+        </label>
+        <label for="badge-boisson-dor">
+          <img src="img/badge-boisson.png" alt="Boisson d'Or">
+        </label>
+      </p>
+      <!-- upload photo -->
+      <p>
+        <span><img src="img/ico-photos.png" alt="">Photos</span>
+        <ons-button class="ghost-btn trigger_file" modifier="large" onclick="" type="file">Ajouter une photo</ons-button>
+        <input type="file" class="file_icon" style="opacity:0;">
+        <!-- NEXT -->
+        <ons-button modifier="large" class="valid_form">Valider</ons-button>
+      </div>
+      <div class="add_step4 form-step">
+        <div class="added__ctn">
+          <h1 class="center">Merci de votre contribution</h1>
+          <img src="img/badge-ok.png" alt="thanks !">
+          <p>Nous avons bien reçu vos informations. Nous les ajouterons bientôt à la liste des établissements de <strong>Match</strong>, après validation.</p>
+          <!-- <ons-button modifier="large">Recommencer</ons-button> -->
+        </div>
+      </div>
+    </form>
+  </ons-page>
+</template>
+
+<!-- TEMPLATE CONFIRM ADDED LOCATION -->
+<template id="added.html">
+  <ons-page id="added">
+    <ons-toolbar>
+      <img src="img/Group.png" alt="Footix logo" />
+    </ons-toolbar>
+    <div class="added__ctn">
+      <h1 class="center">Merci de votre contribution</h1>
+      <img src="img/badge-ok.png" alt="thanks !">
+      <p>Nous avons bien reçu vos informations. Nous les ajouterons bientôt à la liste des établissements de <strong>Match</strong>, après validation.</p>
+      <ons-button modifier="large" onclick="">Recommencer</ons-button>
+    </div>
+  </ons-page>
+</template>
+
+    <template id="search.html">
+    <ons-page id="search">
+      <ons-toolbar>
+        <div class="left"><ons-back-button></ons-back-button></div>
+        <div class="center">Detail</div>
+      </ons-toolbar>
+      <section class="listing">
+        <!-- TITRE -->
+        <h2>Ne cherchez plus</h2>
+
+        <!-- ONE ITEM -->
+
+      </section>
+    </ons-page>
+
+</template>
+
 
 </div>
 </div>
-<script type="text/javascript" src="cordova.js"></script>
-<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/methods.js"></script>
 </body>
 </html>

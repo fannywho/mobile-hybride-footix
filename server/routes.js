@@ -29,6 +29,16 @@ myRouter.route('/results')
   });
 });
 
+myRouter.route('/results/id/:place_id')
+// GET
+.get(function(req,res){
+  Place.findById(req.params.place_id, function(err, place) {
+    if (err)
+      res.send(err);
+    res.json(place);
+  });
+});
+
 myRouter.route('/add')
 // POST
 .post(function(req,res){
@@ -63,7 +73,7 @@ myRouter.route('/results/:place_city')
       res.send(err);
     res.json(place);
   });
-})
+});
 
 myRouter.route('/results/:place_city/:place_club')
 // GET
@@ -74,46 +84,7 @@ myRouter.route('/results/:place_city/:place_club')
       res.send(err);
     res.json(place);
   });
-})
-
-myRouter.route('/results/:place_id')
-// GET
-.get(function(req,res){
-  //Mongoose prévoit une fonction pour la recherche d'un document par son identifiant
-  Place.findById(req.params.place_id, function(err, place) {
-    if (err)
-      res.send(err);
-    res.json(place);
-  });
-})
-// PUT
-.put(function(req,res){
-// On commence par rechercher le lieu souhaité
-  Place.findById(req.params.place_id, function(err, place) {
-    if (err){
-      res.send(err);
-    }
-  // Mise à jour des données de la piscine
-  place.name = req.body.name;
-    place.save(function(err){
-      if(err){
-        res.send(err);
-      }
-      // Si tout est ok
-      res.json({message : 'Bravo, mise à jour des données OK'});
-    });
-  });
-})
-// DELETE
-.delete(function(req,res){
-  Place.remove({_id: req.params.place_id}, function(err, place){
-    if (err){
-      res.send(err);
-    }
-    res.json({message:"Bravo, lieu supprimé"});
-  });
 });
-
 
 // Liste des badges
 myRouter.route('/badges')
@@ -127,6 +98,18 @@ myRouter.route('/badges')
     res.json(badge);
   });
 });
+// Liste des badges
+myRouter.route('/badges/:badge_id')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Badge.findById(req.params.badge_id, function(err, badge){
+    if (err){
+      res.send(err);
+    }
+    res.json(badge);
+  });
+});
 
 // Liste des clubs
 myRouter.route('/clubs')
@@ -134,6 +117,19 @@ myRouter.route('/clubs')
 .get(function(req,res){
 // Utilisation de notre schéma Place pour interrogation de la base
   Club.find(function(err, club){
+    if (err){
+      res.send(err);
+    }
+    res.json(club);
+  });
+});
+
+// Liste des clubs
+myRouter.route('/clubs/:club_id')
+// GET
+.get(function(req,res){
+// Utilisation de notre schéma Place pour interrogation de la base
+  Club.findById(req.params.club_id, function(err, club){
     if (err){
       res.send(err);
     }
